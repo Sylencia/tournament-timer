@@ -1,0 +1,13 @@
+.header {
+  position: sticky;
+  top: 0;
+
+  height: 3em;
+  width: 100%;
+  border-bottom: 1px solid grey;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -1,0 +1,21 @@
+#root {
+  margin: 0 auto;
+  padding: 0 1rem;
+  text-align: center;
+
+  font-family: "Lato", sans-serif;
+}
+
+.main-area {
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.app-container {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  min-width: 320px;
+  max-height: 100vh;
+}
