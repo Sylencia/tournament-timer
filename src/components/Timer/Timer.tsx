@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./Timer.scss";
 import { useTimer } from "../../hooks/useTimer";
+import clsx from "clsx";
 
 interface TimerTypes {
   id: number;
@@ -34,17 +35,16 @@ export const Timer = ({ id, readOnly }: TimerTypes) => {
     timerId: id.toString(),
   });
 
-  const containerClass = readOnly ? "container read-only" : "container";
-
   return (
-    <div className={containerClass}>
+    <div className={clsx("container", { "read-only": readOnly })}>
       <div className="title">{title}</div>
       <div className="subtitle">{subtitle}</div>
       <div className="timer">{formatTime(timeRemaining)}</div>
       {!readOnly && (
         <div className="controls">
-          <button onClick={start}>Start</button>
-          <button onClick={pause}>Pause</button>
+          <button onClick={() => (isRunning ? pause() : start())}>
+            {isRunning ? "Pause" : "Start"}
+          </button>
         </div>
       )}
     </div>
