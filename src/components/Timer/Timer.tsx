@@ -29,9 +29,12 @@ export const Timer = ({ id, readOnly }: TimerTypes) => {
   const [title, setTitle] = useState<string>("Magic the Gathering Standard");
   const [subtitle, setSubtitle] = useState<string>("Round 1/3");
 
-  const { timeRemaining, start, pause, isRunning } = useTimer({
+  const { timeRemaining, start, pause, isRunning, restart } = useTimer({
     timerLength: 10,
-    onFinish: () => {},
+    onFinish: () => {
+      setTitle("Finished Event");
+      setSubtitle("");
+    },
     timerId: id.toString(),
   });
 
@@ -39,12 +42,15 @@ export const Timer = ({ id, readOnly }: TimerTypes) => {
     <div className={clsx("container", { "read-only": readOnly })}>
       <div className="title">{title}</div>
       <div className="subtitle">{subtitle}</div>
-      <div className="timer">{formatTime(timeRemaining)}</div>
+      <div className={clsx("timer", { overtime: timeRemaining < 0 })}>
+        {formatTime(timeRemaining)}
+      </div>
       {!readOnly && (
         <div className="controls">
           <button onClick={() => (isRunning ? pause() : start())}>
             {isRunning ? "Pause" : "Start"}
           </button>
+          <button onClick={() => restart(20)}>Restart</button>
         </div>
       )}
     </div>

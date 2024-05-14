@@ -53,6 +53,11 @@
   align-items: center;
 
   font-size: 5rem;
+  color: rgba(255, 255, 255, 0.87);
+
+  &.overtime {
+    color: rgba(255, 0, 0, 0.87);
+  }
 }
 
 .controls {

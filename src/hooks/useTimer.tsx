@@ -83,6 +83,26 @@ export const useTimer = ({ timerLength, onFinish, timerId }: useTimerProps) => {
     localStorage.setItem(`${timerId}_timer`, JSON.stringify(item));
   }, [timerId, timeRemaining]);
 
+  const restart = useCallback(
+    (newLength?: number) => {
+      if (newLength) {
+        setTimeRemaining(newLength);
+      } else {
+        setTimeRemaining(timerLength);
+      }
+
+      setIsRunning(false);
+
+      const item: PausedTimerStorage = {
+        isRunning: false,
+        timeRemaining: newLength ?? timerLength,
+      };
+
+      localStorage.setItem(`${timerId}_timer`, JSON.stringify(item));
+    },
+    [timerLength, timerId]
+  );
+
   useInterval(
     () => {
       setTimeRemaining((time) => time - 1);
@@ -97,6 +117,7 @@ export const useTimer = ({ timerLength, onFinish, timerId }: useTimerProps) => {
     timeRemaining,
     start,
     pause,
+    restart,
     isRunning,
   };
 };
