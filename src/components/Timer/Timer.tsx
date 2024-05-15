@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./Timer.scss";
 import { useTimer } from "../../hooks/useTimer";
 import clsx from "clsx";
+import { ModeContext } from "../../ModeContext";
 
-interface TimerTypes {
+interface ITimerProps {
   id: number;
-  readOnly: boolean;
 }
 
 const formatTime = (seconds: number): string => {
@@ -25,7 +25,8 @@ const formatTime = (seconds: number): string => {
   return formattedString;
 };
 
-export const Timer = ({ id, readOnly }: TimerTypes) => {
+export const Timer = ({ id }: ITimerProps) => {
+  const { mode } = useContext(ModeContext);
   const [title, setTitle] = useState<string>("Magic the Gathering Standard");
   const [subtitle, setSubtitle] = useState<string>("Round 1/3");
 
@@ -39,13 +40,13 @@ export const Timer = ({ id, readOnly }: TimerTypes) => {
   });
 
   return (
-    <div className={clsx("container", { "read-only": readOnly })}>
+    <div className={clsx("container", { "view-mode": mode === "view" })}>
       <div className="title">{title}</div>
       <div className="subtitle">{subtitle}</div>
       <div className={clsx("timer", { overtime: timeRemaining < 0 })}>
         {formatTime(timeRemaining)}
       </div>
-      {!readOnly && (
+      {mode === "edit" && (
         <div className="controls">
           <button onClick={() => (isRunning ? pause() : start())}>
             {isRunning ? "Pause" : "Start"}

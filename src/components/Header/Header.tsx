@@ -1,17 +1,15 @@
-import { Dispatch, SetStateAction } from "react";
+import { useContext } from "react";
 import "./Header.scss";
+import { ModeContext } from "../../ModeContext";
 
-interface HeaderProps {
-  readOnly: boolean;
-  setReadOnly: Dispatch<SetStateAction<boolean>>;
-}
+export const Header = () => {
+  const { mode, toggleMode } = useContext(ModeContext);
 
-export const Header = ({ readOnly, setReadOnly }: HeaderProps) => {
   return (
     <header className="header">
       <h3>Tournament Timer</h3>
-      <button onClick={() => setReadOnly(!readOnly)}>
-        {readOnly ? "Set to Edit" : "Set to Read Only"}
+      <button onClick={toggleMode}>
+        {mode === "view" ? "Set to Edit" : "Set to View"}
       </button>
     </header>
   );
