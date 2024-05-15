@@ -1,0 +1,120 @@
+.event-container {
+  width: 100%;
+  height: 20vh;
+  min-height: 150px;
+  line-height: normal;
+
+  border: 1px solid white;
+  border-radius: 8px;
+  padding: 1em;
+
+  display: grid;
+  column-gap: 2rem;
+  row-gap: 1rem;
+  grid-template-rows: repeat(auto-fill, 1fr);
+  grid-template-columns: repeat(auto-fill, 1fr);
+  grid-template-areas:
+    "name name name name buttons"
+    "rounds roundTime hasDraft draftTime buttons";
+
+  input[type="text"] {
+    height: 3rem;
+    width: 100%;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-bottom: 1px solid #5a4c47;
+    font-size: 1.5rem;
+
+    transition: 0.2s border-color ease-in;
+
+    &:focus {
+      border-bottom: 1px solid #a18072;
+    }
+  }
+
+  input[type="checkbox"] {
+    height: 24px;
+    width: 24px;
+
+    &:checked {
+      accent-color: #a18072;
+    }
+  }
+
+  button {
+    background-color: #5a4c47;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+
+    display: flex;
+    justify-content: center;
+    place-items: center;
+
+    height: 1.5rem;
+
+    transition: 0.2s background-color ease-in;
+
+    &:active {
+      background-color: #a18072;
+    }
+  }
+
+  .title {
+    font-size: 0.75rem;
+  }
+
+  .eventDetail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .input-with-label {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .label {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .eventName {
+    grid-area: name;
+  }
+
+  .rounds {
+    grid-area: rounds;
+  }
+
+  .roundTime {
+    grid-area: roundTime;
+  }
+
+  .buttons {
+    grid-area: buttons;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .hasDraft {
+    grid-area: hasDraft;
+
+    .checkbox-section {
+      height: 3rem;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .draftTime {
+    grid-area: draftTime;
+  }
+}

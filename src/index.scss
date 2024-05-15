@@ -1,0 +1,20 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input,
+button {
+  // all: unset;
+  background: none;
+  border: none;
+  color: white;
+  outline: none;
+  font-family: inherit;
+  font-size: 1rem;
+}

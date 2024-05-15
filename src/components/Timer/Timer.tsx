@@ -40,7 +40,7 @@ export const Timer = ({ id }: ITimerProps) => {
   });
 
   return (
-    <div className={clsx("container", { "view-mode": mode === "view" })}>
+    <div className={clsx("timer-container", { "view-mode": mode === "view" })}>
       <div className="title">{title}</div>
       <div className="subtitle">{subtitle}</div>
       <div className={clsx("timer", { overtime: timeRemaining < 0 })}>

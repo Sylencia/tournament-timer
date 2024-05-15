@@ -1,23 +1,19 @@
-import { useState } from "react";
-import "./App.scss";
+import { ModeProvider } from "./ModeContext";
 import { Timer } from "./components/Timer";
 import { Header } from "./components/Header";
 import { AddEvent } from "./components/AddEvent";
-import { ModeProvider } from "./ModeContext";
+import { EventSetup } from "./components/EventSetup";
+import "./App.scss";
 
 function App() {
-  const [readOnly, setReadOnly] = useState<boolean>(false);
-
   return (
     <ModeProvider>
       <div className="app-container">
         <Header />
-        <div className="main-area">
-          <Timer id={1} />
-          <Timer id={2} />
-          <AddEvent />
-          <AddEvent />
-        </div>
+        <Timer id={1} />
+        <Timer id={2} />
+        <AddEvent />
+        <EventSetup />
       </div>
     </ModeProvider>
   );

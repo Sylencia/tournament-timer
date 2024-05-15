@@ -1,25 +1,21 @@
-#root {
+.app-container {
+  font-family: Lato, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  color: rgba(255, 255, 255, 0.87);
+  background: linear-gradient(-45deg, #182449, #201320);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
   margin: 0 auto;
   padding: 0 1rem;
-  text-align: center;
 
-  font-family: "Lato", sans-serif;
-}
-
-.main-area {
-  padding: 2rem 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.app-container {
-  margin: 0;
   display: flex;
   flex-direction: column;
   place-items: center;
+  gap: 1rem;
   min-width: 320px;
   height: 100vh;
 }
