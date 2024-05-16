@@ -1,3 +1,6 @@
+@import "@radix-ui/colors/ruby.css";
+@import "@radix-ui/colors/ruby-dark.css";
+
 .timer-container {
   width: 100%;
   height: 20vh;
@@ -53,10 +56,15 @@
   align-items: center;
 
   font-size: 5rem;
-  color: rgba(255, 255, 255, 0.87);
 
   &.overtime {
-    color: rgba(255, 0, 0, 0.87);
+    .light & {
+      color: var(--ruby-9);
+    }
+
+    .dark & {
+      color: var(--ruby-9);
+    }
   }
 }
 

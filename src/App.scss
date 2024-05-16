@@ -1,8 +1,12 @@
+@import "@radix-ui/colors/iris.css";
+@import "@radix-ui/colors/iris-dark.css";
+@import "@radix-ui/colors/plum.css";
+@import "@radix-ui/colors/plum-dark.css";
+@import "@radix-ui/colors/white-alpha.css";
+@import "@radix-ui/colors/black-alpha.css";
+
 .app-container {
   font-family: Lato, system-ui, Avenir, Helvetica, Arial, sans-serif;
-
-  color: rgba(255, 255, 255, 0.87);
-  background: linear-gradient(-45deg, #182449, #201320);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -18,4 +22,14 @@
   gap: 1rem;
   min-width: 320px;
   height: 100vh;
+
+  &.dark {
+    background: linear-gradient(-45deg, var(--iris-3), var(--plum-2));
+    color: var(--white-a10);
+  }
+
+  &.light {
+    background: linear-gradient(-45deg, var(--iris-4), var(--plum-4));
+    color: var(--black-a10);
+  }
 }

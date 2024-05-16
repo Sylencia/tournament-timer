@@ -1,3 +1,11 @@
+@import "@radix-ui/colors/red.css";
+@import "@radix-ui/colors/jade.css";
+@import "@radix-ui/colors/bronze.css";
+
+@import "@radix-ui/colors/red-dark.css";
+@import "@radix-ui/colors/jade-dark.css";
+@import "@radix-ui/colors/bronze-dark.css";
+
 .event-container {
   width: 100%;
   height: 20vh;
@@ -12,23 +20,43 @@
   column-gap: 2rem;
   row-gap: 1rem;
   grid-template-rows: repeat(auto-fill, 1fr);
-  grid-template-columns: repeat(auto-fill, 1fr);
+  grid-template-columns:
+    minmax(0, 1fr)
+    repeat(4, minmax(90px, 150px))
+    2rem
+    minmax(0, 1fr);
   grid-template-areas:
-    "name name name name buttons"
-    "rounds roundTime hasDraft draftTime buttons";
+    ". name name name name buttons ."
+    ". hasDraft draftTime rounds roundTime buttons .";
+
+  .light & {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .dark & {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
 
   input[type="text"] {
     height: 3rem;
     width: 100%;
     padding-left: 4px;
     padding-right: 4px;
-    border-bottom: 1px solid #5a4c47;
+    border-bottom: 1px solid var(--bronze-7);
     font-size: 1.5rem;
 
     transition: 0.2s border-color ease-in;
 
     &:focus {
-      border-bottom: 1px solid #a18072;
+      border-bottom: 1px solid var(--bronze-9);
+    }
+
+    .light & {
+      color: black;
+    }
+
+    .dark & {
+      color: white;
     }
   }
 
@@ -39,34 +67,65 @@
     &:checked {
       accent-color: #a18072;
     }
+
+    &:focus-visible {
+      outline: 1px solid white;
+      outline-offset: 0;
+    }
   }
 
   button {
-    background-color: #5a4c47;
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
+    box-shadow: none;
+    border: none;
 
     display: flex;
     justify-content: center;
     place-items: center;
 
-    height: 1.5rem;
+    height: 2rem;
+    width: 2rem;
 
     transition: 0.2s background-color ease-in;
 
-    &:active {
-      background-color: #a18072;
+    svg {
+      color: white;
+    }
+
+    &:focus-visible {
+      outline: 1px solid white;
+      outline-offset: 0;
     }
   }
 
   .title {
     font-size: 0.75rem;
+
+    &.error {
+      color: var(--red-11);
+    }
+  }
+
+  .checkbox-title {
+    font-size: 0.75rem;
+
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 
   .eventDetail {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    opacity: 1;
+
+    transition: 0.2s opacity ease-in;
+
+    &.disabled {
+      opacity: 0;
+    }
   }
 
   .input-with-label {
@@ -87,19 +146,43 @@
 
   .rounds {
     grid-area: rounds;
+
+    input {
+      text-align: center;
+    }
   }
 
   .roundTime {
     grid-area: roundTime;
+
+    input {
+      text-align: center;
+    }
   }
 
   .buttons {
     grid-area: buttons;
 
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     justify-content: space-around;
     align-items: center;
+
+    .submit {
+      background-color: var(--jade-7);
+
+      &:active {
+        background-color: var(--jade-9);
+      }
+    }
+
+    .cancel {
+      background-color: var(--red-7);
+
+      &:active {
+        background-color: var(--red-9);
+      }
+    }
   }
 
   .hasDraft {
@@ -116,5 +199,9 @@
 
   .draftTime {
     grid-area: draftTime;
+
+    input {
+      text-align: center;
+    }
   }
 }

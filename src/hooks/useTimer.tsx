@@ -1,33 +1,25 @@
 import { useCallback, useEffect, useState } from "react";
 import { useInterval } from "./useInterval";
+import { ISavedEvent } from "../components/Event";
 
 interface useTimerProps {
   timerLength: number;
   onFinish: () => void;
-  timerId: string;
+  storageId: string;
 }
-
-interface RunningTimerStorage {
-  isRunning: true;
-  endTime: number;
-}
-
-interface PausedTimerStorage {
-  isRunning: false;
-  timeRemaining: number;
-}
-
-type TimerStorage = RunningTimerStorage | PausedTimerStorage;
 
 const INTERVAL_DELAY = 1000;
 
-export const useTimer = ({ timerLength, onFinish, timerId }: useTimerProps) => {
-  const id = `${timerId}_timer`;
+export const useTimer = ({
+  timerLength,
+  onFinish,
+  storageId,
+}: useTimerProps) => {
   const [timeRemaining, setTimeRemaining] = useState<number>(timerLength);
   const [isRunning, setIsRunning] = useState<boolean>(false);
 
   const parseStoredValues = useCallback((item: string) => {
-    const parsed: TimerStorage = JSON.parse(item);
+    const parsed: ISavedEvent = JSON.parse(item);
     setIsRunning(parsed.isRunning);
     if (!parsed.isRunning) {
       setTimeRemaining(parsed.timeRemaining);
@@ -38,22 +30,22 @@ export const useTimer = ({ timerLength, onFinish, timerId }: useTimerProps) => {
   }, []);
 
   useEffect(() => {
-    const item = localStorage.getItem(id);
+    const item = localStorage.getItem(storageId);
     if (item) {
       parseStoredValues(item);
     }
-  }, [id, parseStoredValues]);
+  }, [storageId, parseStoredValues]);
 
   useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === id && event.newValue) {
+      if (event.key === storageId && event.newValue) {
         parseStoredValues(event.newValue);
       }
     };
 
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
-  }, [id, parseStoredValues]);
+  }, [storageId, parseStoredValues]);
 
   const handleFinish = useCallback(() => {
     onFinish();
@@ -64,24 +56,26 @@ export const useTimer = ({ timerLength, onFinish, timerId }: useTimerProps) => {
     const endTime = currentTime + timeRemaining;
     setIsRunning(true);
 
-    const item: RunningTimerStorage = {
+    const item: ISavedEvent = {
+      ...JSON.parse(localStorage.getItem(storageId)!),
       endTime,
       isRunning: true,
     };
 
-    localStorage.setItem(`${timerId}_timer`, JSON.stringify(item));
-  }, [timerId, timeRemaining]);
+    localStorage.setItem(storageId, JSON.stringify(item));
+  }, [storageId, timeRemaining]);
 
   const pause = useCallback(() => {
     setIsRunning(false);
 
-    const item: PausedTimerStorage = {
+    const item: ISavedEvent = {
+      ...JSON.parse(localStorage.getItem(storageId)!),
       isRunning: false,
       timeRemaining,
     };
 
-    localStorage.setItem(`${timerId}_timer`, JSON.stringify(item));
-  }, [timerId, timeRemaining]);
+    localStorage.setItem(storageId, JSON.stringify(item));
+  }, [storageId, timeRemaining]);
 
   const restart = useCallback(
     (newLength?: number) => {
@@ -93,14 +87,15 @@ export const useTimer = ({ timerLength, onFinish, timerId }: useTimerProps) => {
 
       setIsRunning(false);
 
-      const item: PausedTimerStorage = {
+      const item: ISavedEvent = {
+        ...JSON.parse(localStorage.getItem(storageId)!),
         isRunning: false,
         timeRemaining: newLength ?? timerLength,
       };
 
-      localStorage.setItem(`${timerId}_timer`, JSON.stringify(item));
+      localStorage.setItem(storageId, JSON.stringify(item));
     },
-    [timerLength, timerId]
+    [timerLength, storageId]
   );
 
   useInterval(

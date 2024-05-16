@@ -1,5 +1,13 @@
 import "./AddEvent.scss";
 
-export const AddEvent = () => {
-  return <button className="add-event">+</button>;
+interface IAddEventProps {
+  onAddEvent: () => void;
+}
+
+export const AddEvent = ({ onAddEvent }: IAddEventProps) => {
+  return (
+    <button className="add-event" onClick={onAddEvent}>
+      +
+    </button>
+  );
 };
