@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import "./Timer.scss";
 import { useTimer } from "../../hooks/useTimer";
 import clsx from "clsx";
 import { ModeContext } from "../../ModeContext";
-import { ISavedEvent } from "../Event";
+import { ISavedEvent, defaultSavedEvent } from "../../interfaces";
 
 interface ITimerProps {
   storageId: string;
@@ -28,35 +28,128 @@ const formatTime = (seconds: number): string => {
 
 export const Timer = ({ storageId }: ITimerProps) => {
   const { mode } = useContext(ModeContext);
-  const [title, setTitle] = useState<string>("");
-  const [subtitle, setSubtitle] = useState<string>("");
+
+  // Event State
+  const [eventDetails, setEventDetails] =
+    useState<ISavedEvent>(defaultSavedEvent);
+  // Timer State
+  const [timeRemaining, setTimeRemaining] = useState<number>(0);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+
+  useEffect(() => {
+    window.addEventListener("timerTick", handleTimerTick);
+
+    return () => window.removeEventListener("timerTick", handleTimerTick);
+  });
+
+  const handleTimerTick = useCallback(() => {
+    if (isRunning) {
+      setTimeRemaining((time) => time - 1);
+      if (timeRemaining === 0) {
+        console.log("Finished");
+      }
+    }
+  }, [isRunning, timeRemaining]);
+
+  const parseTimerDetails = useCallback((details: ISavedEvent) => {
+    setIsRunning(details.isRunning);
+    if (!details.isRunning) {
+      setTimeRemaining(details.timeRemaining);
+    } else {
+      const currentTime = Math.floor(Date.now() / 1000);
+      setTimeRemaining(details.endTime - currentTime);
+    }
+  }, []);
 
   useEffect(() => {
     const item = localStorage.getItem(storageId);
     if (item) {
       const parsed: ISavedEvent = JSON.parse(item);
-      let subtitle = "Draft Round";
-      if (parsed.currentRound > 0) {
-        subtitle =
-          parsed.rounds === 1
-            ? ""
-            : `Round ${parsed.currentRound}/${parsed.rounds}`;
+      setEventDetails(parsed);
+      parseTimerDetails(parsed);
+    }
+  }, [storageId, parseTimerDetails]);
+
+  useEffect(() => {
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === storageId && event.newValue) {
+        parseTimerDetails(JSON.parse(event.newValue));
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [storageId, parseTimerDetails]);
+
+  const subtitle = useMemo(() => {
+    let result = "Draft Round";
+    if (eventDetails.currentRound > 0) {
+      result =
+        eventDetails.rounds === 1
+          ? ""
+          : `Round ${eventDetails.currentRound}/${eventDetails.rounds}`;
+    }
+
+    return result;
+  }, [eventDetails]);
+
+  const updateEventDetails = useCallback(
+    (details: ISavedEvent) => {
+      setEventDetails(details);
+      localStorage.setItem(storageId, JSON.stringify(details));
+    },
+    [setEventDetails, storageId]
+  );
+
+  // Timer Functionality
+  const start = useCallback(() => {
+    const currentTime = Math.floor(Date.now() / 1000);
+    const endTime = currentTime + timeRemaining;
+    setIsRunning(true);
+
+    const item: ISavedEvent = {
+      ...eventDetails,
+      endTime,
+      isRunning: true,
+    };
+
+    updateEventDetails(item);
+  }, [timeRemaining, eventDetails, updateEventDetails]);
+
+  const pause = useCallback(() => {
+    setIsRunning(false);
+
+    const item: ISavedEvent = {
+      ...eventDetails,
+      isRunning: false,
+      timeRemaining,
+    };
+
+    updateEventDetails(item);
+  }, [eventDetails, timeRemaining, updateEventDetails]);
+
+  const restart = useCallback(
+    (newLength: number) => {
+      if (newLength) {
+        setTimeRemaining(newLength);
       }
 
-      setTitle(parsed.eventName);
-      setSubtitle(subtitle);
-    }
-  }, [storageId]);
+      setIsRunning(false);
 
-  const { timeRemaining, start, pause, isRunning, restart } = useTimer({
-    timerLength: 10,
-    onFinish: () => {},
-    storageId,
-  });
+      const item: ISavedEvent = {
+        ...eventDetails,
+        isRunning: false,
+        timeRemaining: newLength,
+      };
+
+      updateEventDetails(item);
+    },
+    [eventDetails, updateEventDetails]
+  );
 
   return (
     <div className={clsx("timer-container", { "view-mode": mode === "view" })}>
-      <div className="title">{title}</div>
+      <div className="title">{eventDetails.eventName}</div>
       <div className="subtitle">{subtitle}</div>
       <div className={clsx("timer", { overtime: timeRemaining < 0 })}>
         {formatTime(timeRemaining)}
@@ -66,7 +159,7 @@ export const Timer = ({ storageId }: ITimerProps) => {
           <button onClick={() => (isRunning ? pause() : start())}>
             {isRunning ? "Pause" : "Start"}
           </button>
-          <button onClick={() => restart(20)}>Restart</button>
+          <button onClick={() => restart(20)}>Next Round</button>
         </div>
       )}
     </div>

@@ -4,9 +4,11 @@ import { ModeContext } from "./ModeContext";
 import { Header } from "./components/Header";
 import { Event } from "./components/Event";
 import "./App.scss";
+import { useSecondTick } from "./hooks/useSecondTick";
 
 function App() {
   const { colorScheme } = useContext(ModeContext);
+  useSecondTick();
 
   return (
     <div
