@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 
-export const useSecondTick = () => {
+export const useUpdateTick = (delay: number) => {
   useEffect(() => {
     const interval = setInterval(() => {
       const event = new Event("timerTick");
       window.dispatchEvent(event);
-    }, 1000);
+    }, delay);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [delay]);
 };

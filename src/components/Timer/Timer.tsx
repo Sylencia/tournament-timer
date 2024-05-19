@@ -1,4 +1,11 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import "./Timer.scss";
 import clsx from "clsx";
 import { PrefsContext } from "../../PrefsContext";
@@ -9,6 +16,7 @@ import {
   PauseIcon,
   PlayIcon,
 } from "@radix-ui/react-icons";
+import chime from "./Chime.mp3";
 
 interface ITimerProps {
   storageId: string;
@@ -41,6 +49,14 @@ export const Timer = ({ storageId, onEventFinish }: ITimerProps) => {
   // Timer State
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  // Audio
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const playSound = () => {
+    if (audioRef.current) {
+      audioRef.current.play();
+    }
+  };
 
   useEffect(() => {
     window.addEventListener("timerTick", handleTimerTick);
@@ -50,19 +66,20 @@ export const Timer = ({ storageId, onEventFinish }: ITimerProps) => {
 
   const handleTimerTick = useCallback(() => {
     if (isRunning) {
-      setTimeRemaining((time) => time - 1);
+      const currentTime = Math.round(Date.now() / 1000);
+      setTimeRemaining(eventDetails.endTime - currentTime);
       if (timeRemaining === 0) {
-        console.log("Finished");
+        playSound();
       }
     }
-  }, [isRunning, timeRemaining]);
+  }, [isRunning, timeRemaining, eventDetails]);
 
   const parseTimerDetails = useCallback((details: ISavedEvent) => {
     setIsRunning(details.isRunning);
     if (!details.isRunning) {
       setTimeRemaining(details.timeRemaining);
     } else {
-      const currentTime = Math.floor(Date.now() / 1000);
+      const currentTime = Math.round(Date.now() / 1000);
       setTimeRemaining(details.endTime - currentTime);
     }
   }, []);
@@ -111,7 +128,7 @@ export const Timer = ({ storageId, onEventFinish }: ITimerProps) => {
 
   // Timer Functionality
   const start = useCallback(() => {
-    const currentTime = Math.floor(Date.now() / 1000);
+    const currentTime = Math.round(Date.now() / 1000);
     const endTime = currentTime + timeRemaining;
     setIsRunning(true);
 
@@ -152,6 +169,7 @@ export const Timer = ({ storageId, onEventFinish }: ITimerProps) => {
 
   return (
     <div className={clsx("timer-container", { "view-mode": mode === "view" })}>
+      <audio ref={audioRef} src={chime} />
       <div className="title">{eventDetails.eventName}</div>
       <div className="subtitle">{subtitle}</div>
       <div className={clsx("timer", { overtime: timeRemaining < 0 })}>

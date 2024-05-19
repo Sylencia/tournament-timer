@@ -22,25 +22,32 @@
 
   display: grid;
   column-gap: 1rem;
-  grid-template-rows: 1fr 1fr max-content;
-  grid-template-columns: max-content auto;
+  grid-template-rows: 2.5rem auto max-content;
+  grid-template-columns: 1fr auto;
   grid-template-areas:
     "title timer"
     "subtitle timer"
     "controls timer";
 
   &.view-mode {
-    grid-template-rows: repeat(1fr, 2);
+    grid-template-rows: 3.5rem 1fr;
     grid-template-columns: 1fr max-content;
     grid-template-areas:
-      "title timer"
+      "title title"
       "subtitle timer";
 
     .title {
+      font-size: 2.5em;
       align-items: flex-start;
     }
     .subtitle {
-      align-items: flex-end;
+      font-size: 2rem;
+      color: var(--white-a8);
+      align-items: flex-start;
+    }
+
+    .timer {
+      font-size: 7rem;
     }
   }
 
@@ -51,11 +58,14 @@
     border: none;
 
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 4px;
     place-items: center;
 
     height: 2rem;
-    width: 125px;
+    width: fit-content;
+    min-width: 100px;
+    max-width: 125px;
     background-color: var(--white-a10);
 
     transition: 0.2s background-color ease-in;
@@ -74,17 +84,19 @@
   .title {
     grid-area: title;
 
-    font-size: 3rem;
+    font-size: 2rem;
 
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
   }
 
   .subtitle {
     grid-area: subtitle;
 
-    font-size: 3rem;
+    font-size: 2rem;
 
     display: flex;
     flex-direction: row;
@@ -97,7 +109,7 @@
     justify-content: flex-end;
     align-items: center;
 
-    font-size: 7rem;
+    font-size: 5rem;
 
     &.overtime {
       color: var(--red-9);
@@ -110,7 +122,7 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: flex-end;
     gap: 2em;
   }
 

@@ -4,11 +4,11 @@ import { PrefsContext } from "./PrefsContext";
 import { Header } from "./components/Header";
 import { Event } from "./components/Event";
 import "./App.scss";
-import { useSecondTick } from "./hooks/useSecondTick";
+import { useUpdateTick } from "./hooks/useUpdateTick";
 
 function App() {
   const { colorScheme, showHeader } = useContext(PrefsContext);
-  useSecondTick();
+  useUpdateTick(300);
 
   return (
     <div
