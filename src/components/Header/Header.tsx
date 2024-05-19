@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import "./Header.scss";
 import { PrefsContext } from "../../PrefsContext";
 import { Cross2Icon, EyeOpenIcon, Pencil2Icon } from "@radix-ui/react-icons";
@@ -6,14 +6,6 @@ import { ExpandableButton } from "../ExpandableButton";
 
 export const Header = () => {
   const { mode, toggleMode, toggleHeader } = useContext(PrefsContext);
-  const [modeHover, setModeHover] = useState<IButtonFocus>({
-    hover: false,
-    focus: false,
-  });
-  const [closeHover, setCloseHover] = useState<IButtonFocus>({
-    hover: false,
-    focus: false,
-  });
 
   return (
     <header className="header-container">

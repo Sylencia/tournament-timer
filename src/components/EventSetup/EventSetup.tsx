@@ -2,7 +2,7 @@ import { ChangeEvent, useCallback, useState } from "react";
 import "./EventSetup.scss";
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import clsx from "clsx";
-import { ISavedEvent } from "../Event";
+import { ISavedEvent } from "../../interfaces";
 
 interface IEventDetails {
   eventName: string | undefined;
