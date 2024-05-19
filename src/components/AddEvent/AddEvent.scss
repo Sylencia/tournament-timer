@@ -1,12 +1,15 @@
+@import "@radix-ui/colors/purple.css";
+@import "@radix-ui/colors/purple-dark.css";
+
 .add-event {
   width: 100%;
   height: 20vh;
-  min-height: 150px;
+  min-height: 200px;
 
-  border: 1px green dashed;
-  border-radius: 8px;
+  border: 1px var(--purple-7) dashed;
+  border-radius: 7px;
   background-color: transparent;
-  color: white;
+  color: var(--purple-8);
 
   display: flex;
   justify-content: center;
@@ -14,8 +17,19 @@
 
   font-size: 8rem;
 
-  &:focus {
-    border: 1px dashed skyblue;
-    outline: none;
+  &:hover,
+  &:focus,
+  &:focus-visible {
+    outline: 1px dashed var(--purple-9);
+    // border: 1px dashed var(--purple-9);
+    border: none;
+    color: var(--purple-9);
+  }
+
+  &:active {
+    outline: 1px dashed var(--purple-11);
+    // border: 1px dashed var(--purple-11);
+    border: none;
+    color: var(--purple-11);
   }
 }

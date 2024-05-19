@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AddEvent } from "../AddEvent";
 import { EventSetup } from "../EventSetup";
 import { Timer } from "../Timer";
-import { ModeContext } from "../../ModeContext";
+import { PrefsContext } from "../../PrefsContext";
 import { ISavedEvent, defaultSavedEvent } from "../../interfaces";
 
 interface IEventProps {
@@ -12,7 +12,7 @@ interface IEventProps {
 type EventState = "add" | "setup" | "timer";
 
 export const Event = ({ id }: IEventProps) => {
-  const { mode } = useContext(ModeContext);
+  const { mode } = useContext(PrefsContext);
   const [eventState, setEventState] = useState<EventState>("add");
   const storageId = `event_${id}_info`;
 
@@ -83,7 +83,9 @@ export const Event = ({ id }: IEventProps) => {
           onSetupSubmit={progressEventState}
         />
       )}
-      {eventState === "timer" && <Timer storageId={storageId} />}
+      {eventState === "timer" && (
+        <Timer storageId={storageId} onEventFinish={resetEventState} />
+      )}
     </>
   );
 };

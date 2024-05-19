@@ -1,12 +1,18 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import "./Timer.scss";
-import { useTimer } from "../../hooks/useTimer";
 import clsx from "clsx";
-import { ModeContext } from "../../ModeContext";
+import { PrefsContext } from "../../PrefsContext";
 import { ISavedEvent, defaultSavedEvent } from "../../interfaces";
+import {
+  Cross2Icon,
+  DoubleArrowRightIcon,
+  PauseIcon,
+  PlayIcon,
+} from "@radix-ui/react-icons";
 
 interface ITimerProps {
   storageId: string;
+  onEventFinish: () => void;
 }
 
 const formatTime = (seconds: number): string => {
@@ -26,8 +32,8 @@ const formatTime = (seconds: number): string => {
   return formattedString;
 };
 
-export const Timer = ({ storageId }: ITimerProps) => {
-  const { mode } = useContext(ModeContext);
+export const Timer = ({ storageId, onEventFinish }: ITimerProps) => {
+  const { mode } = useContext(PrefsContext);
 
   // Event State
   const [eventDetails, setEventDetails] =
@@ -73,7 +79,9 @@ export const Timer = ({ storageId }: ITimerProps) => {
   useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === storageId && event.newValue) {
-        parseTimerDetails(JSON.parse(event.newValue));
+        const parsed: ISavedEvent = JSON.parse(event.newValue);
+        setEventDetails(parsed);
+        parseTimerDetails(parsed);
       }
     };
 
@@ -128,24 +136,19 @@ export const Timer = ({ storageId }: ITimerProps) => {
     updateEventDetails(item);
   }, [eventDetails, timeRemaining, updateEventDetails]);
 
-  const restart = useCallback(
-    (newLength: number) => {
-      if (newLength) {
-        setTimeRemaining(newLength);
-      }
+  const nextRound = useCallback(() => {
+    setTimeRemaining(eventDetails.roundTime);
+    setIsRunning(false);
 
-      setIsRunning(false);
+    const item: ISavedEvent = {
+      ...eventDetails,
+      isRunning: false,
+      timeRemaining: eventDetails.roundTime,
+      currentRound: eventDetails.currentRound + 1,
+    };
 
-      const item: ISavedEvent = {
-        ...eventDetails,
-        isRunning: false,
-        timeRemaining: newLength,
-      };
-
-      updateEventDetails(item);
-    },
-    [eventDetails, updateEventDetails]
-  );
+    updateEventDetails(item);
+  }, [eventDetails, updateEventDetails]);
 
   return (
     <div className={clsx("timer-container", { "view-mode": mode === "view" })}>
@@ -157,9 +160,32 @@ export const Timer = ({ storageId }: ITimerProps) => {
       {mode === "edit" && (
         <div className="controls">
           <button onClick={() => (isRunning ? pause() : start())}>
-            {isRunning ? "Pause" : "Start"}
+            {isRunning ? (
+              <>
+                <PauseIcon />
+                <div>Pause</div>
+              </>
+            ) : (
+              <>
+                <PlayIcon />
+                <div>Start</div>
+              </>
+            )}
           </button>
-          <button onClick={() => restart(20)}>Next Round</button>
+          {eventDetails.currentRound !== eventDetails.rounds ? (
+            <button onClick={() => nextRound()}>
+              <>
+                <DoubleArrowRightIcon />
+                <div>Next Round</div>
+              </>
+            </button>
+          ) : null}
+          <button className="finish-button" onClick={onEventFinish}>
+            <>
+              <Cross2Icon />
+              <div>Finish Event</div>
+            </>
+          </button>
         </div>
       )}
     </div>

@@ -118,10 +118,8 @@ export const EventSetup = ({
     }
   }, [eventDetails, onSetupSubmit, storageId]);
 
-  console.log(detailsValidation);
-
   return (
-    <div className="event-container">
+    <div className="event-setup-container">
       {detailsValidation.draftTime}
       <div className="eventName eventDetail">
         <div className={clsx("title", { error: !detailsValidation.eventName })}>
