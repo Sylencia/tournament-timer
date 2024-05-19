@@ -1,20 +1,24 @@
 @import "@radix-ui/colors/red.css";
-@import "@radix-ui/colors/jade.css";
-@import "@radix-ui/colors/bronze.css";
-
 @import "@radix-ui/colors/red-dark.css";
+@import "@radix-ui/colors/jade.css";
 @import "@radix-ui/colors/jade-dark.css";
-@import "@radix-ui/colors/bronze-dark.css";
+@import "@radix-ui/colors/purple.css";
+@import "@radix-ui/colors/purple-dark.css";
+@import "@radix-ui/colors/blue.css";
+@import "@radix-ui/colors/blue-dark.css";
+@import "@radix-ui/colors/white-alpha.css";
 
-.event-container {
+.event-setup-container {
   width: 100%;
   height: 20vh;
-  min-height: 150px;
+  min-height: 200px;
   line-height: normal;
 
-  border: 1px solid white;
+  border: 1px solid var(--purple-9);
   border-radius: 8px;
   padding: 1em;
+
+  background-color: var(--white-a1);
 
   display: grid;
   column-gap: 2rem;
@@ -29,34 +33,18 @@
     ". name name name name buttons ."
     ". hasDraft draftTime rounds roundTime buttons .";
 
-  .light & {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-
-  .dark & {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
   input[type="text"] {
     height: 3rem;
     width: 100%;
     padding-left: 4px;
     padding-right: 4px;
-    border-bottom: 1px solid var(--bronze-7);
+    border-bottom: 1px solid var(--purple-7);
     font-size: 1.5rem;
 
     transition: 0.2s border-color ease-in;
 
     &:focus {
-      border-bottom: 1px solid var(--bronze-9);
-    }
-
-    .light & {
-      color: black;
-    }
-
-    .dark & {
-      color: white;
+      border-bottom: 1px solid var(--purple-9);
     }
   }
 
@@ -68,8 +56,11 @@
       accent-color: #a18072;
     }
 
+    &:hover,
+    &:active,
+    &:focus,
     &:focus-visible {
-      outline: 1px solid white;
+      outline: 1px solid var(--blue-9);
       outline-offset: 0;
     }
   }
@@ -91,11 +82,6 @@
 
     svg {
       color: white;
-    }
-
-    &:focus-visible {
-      outline: 1px solid white;
-      outline-offset: 0;
     }
   }
 

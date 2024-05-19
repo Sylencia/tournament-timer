@@ -1,3 +1,6 @@
+@import "@radix-ui/colors/blue.css";
+@import "@radix-ui/colors/blue-dark.css";
+
 body,
 html {
   margin: 0;
@@ -9,10 +12,24 @@ html {
 }
 
 input {
-  // all: unset;
   background: none;
   border: none;
   outline: none;
+  outline-offset: 0;
   font-family: inherit;
   font-size: 1rem;
+
+  color: white;
+}
+
+button {
+  font-family: inherit;
+
+  &:hover,
+  &:focus,
+  &:focus-visible,
+  &:active {
+    outline: 1px solid var(--blue-9);
+    outline-offset: 0;
+  }
 }

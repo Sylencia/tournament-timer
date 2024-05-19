@@ -2,44 +2,17 @@ import { useContext, useEffect, useState } from "react";
 import { AddEvent } from "../AddEvent";
 import { EventSetup } from "../EventSetup";
 import { Timer } from "../Timer";
-import { ModeContext } from "../../ModeContext";
+import { PrefsContext } from "../../PrefsContext";
+import { ISavedEvent, defaultSavedEvent } from "../../interfaces";
 
 interface IEventProps {
   id: number;
 }
 
-export interface ISavedEvent {
-  showTimer: boolean;
-  eventName: string;
-  rounds: number;
-  roundTime: number;
-  hasDraft: boolean;
-  draftTime: number;
-  currentRound: number;
-  timerLength: number;
-  endTime: number;
-  isRunning: boolean;
-  timeRemaining: number;
-}
-
 type EventState = "add" | "setup" | "timer";
 
-const defaultItem: ISavedEvent = {
-  showTimer: false,
-  eventName: "",
-  rounds: 0,
-  roundTime: 0,
-  hasDraft: false,
-  draftTime: 0,
-  currentRound: 0,
-  timerLength: 0,
-  endTime: 0,
-  isRunning: false,
-  timeRemaining: 0,
-};
-
 export const Event = ({ id }: IEventProps) => {
-  const { mode } = useContext(ModeContext);
+  const { mode } = useContext(PrefsContext);
   const [eventState, setEventState] = useState<EventState>("add");
   const storageId = `event_${id}_info`;
 
@@ -49,7 +22,7 @@ export const Event = ({ id }: IEventProps) => {
       const parsed: ISavedEvent = JSON.parse(item);
       setEventState(parsed.showTimer ? "timer" : "add");
     } else {
-      localStorage.setItem(storageId, JSON.stringify(defaultItem));
+      localStorage.setItem(storageId, JSON.stringify(defaultSavedEvent));
     }
   }, [storageId]);
 
@@ -87,14 +60,14 @@ export const Event = ({ id }: IEventProps) => {
     if (eventState === "timer") {
       setEventState("add");
 
-      localStorage.setItem(storageId, JSON.stringify(defaultItem));
+      localStorage.setItem(storageId, JSON.stringify(defaultSavedEvent));
     }
   };
 
   const resetEventState = () => {
     setEventState("add");
 
-    localStorage.setItem(storageId, JSON.stringify(defaultItem));
+    localStorage.setItem(storageId, JSON.stringify(defaultSavedEvent));
   };
 
   const showAdd = eventState === "add" && mode === "edit";
@@ -110,7 +83,9 @@ export const Event = ({ id }: IEventProps) => {
           onSetupSubmit={progressEventState}
         />
       )}
-      {eventState === "timer" && <Timer storageId={storageId} />}
+      {eventState === "timer" && (
+        <Timer storageId={storageId} onEventFinish={resetEventState} />
+      )}
     </>
   );
 };

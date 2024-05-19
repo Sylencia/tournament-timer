@@ -1,91 +1,143 @@
-@import "@radix-ui/colors/ruby.css";
-@import "@radix-ui/colors/ruby-dark.css";
+@import "@radix-ui/colors/red.css";
+@import "@radix-ui/colors/red-dark.css";
+@import "@radix-ui/colors/blue.css";
+@import "@radix-ui/colors/blue-dark.css";
+@import "@radix-ui/colors/purple.css";
+@import "@radix-ui/colors/purple-dark.css";
+@import "@radix-ui/colors/white-alpha.css";
 
 .timer-container {
   width: 100%;
   height: 20vh;
-  min-height: 150px;
-  line-height: normal;
+  min-height: 200px;
+  line-height: 1;
 
-  border: 1px solid white;
+  border: 1px solid var(--purple-9);
   border-radius: 8px;
   padding: 1em;
+
+  background-color: var(--white-a1);
 
   animation: 2s all ease-in;
 
   display: grid;
   column-gap: 1rem;
-  grid-template-rows: 2rem 1fr;
-  grid-template-columns: 1fr 250px;
+  grid-template-rows: 2.5rem auto max-content;
+  grid-template-columns: 1fr auto;
   grid-template-areas:
-    "title subtitle"
+    "title timer"
+    "subtitle timer"
     "controls timer";
 
   &.view-mode {
-    grid-template-rows: 1fr 2fr;
+    grid-template-rows: 3.5rem 1fr;
+    grid-template-columns: 1fr max-content;
     grid-template-areas:
-      "title subtitle"
-      "timer timer";
-  }
-}
+      "title title"
+      "subtitle timer";
 
-.title {
-  grid-area: title;
-
-  font-size: 1.5rem;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-
-.subtitle {
-  grid-area: subtitle;
-
-  font-size: 1.5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-}
-
-.timer {
-  grid-area: timer;
-
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-
-  font-size: 5rem;
-
-  &.overtime {
-    .light & {
-      color: var(--ruby-9);
+    .title {
+      font-size: 2.5em;
+      align-items: flex-start;
+    }
+    .subtitle {
+      font-size: 2rem;
+      color: var(--white-a8);
+      align-items: flex-start;
     }
 
-    .dark & {
-      color: var(--ruby-9);
+    .timer {
+      font-size: 7rem;
     }
   }
-}
 
-.controls {
-  grid-area: controls;
+  button {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    box-shadow: none;
+    border: none;
 
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  gap: 2em;
-}
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    place-items: center;
 
-.view-mode {
+    height: 2rem;
+    width: fit-content;
+    min-width: 100px;
+    max-width: 125px;
+    background-color: var(--white-a10);
+
+    transition: 0.2s background-color ease-in;
+
+    &:hover,
+    &:focus,
+    &:focus-visible {
+      background-color: var(--white-a11);
+    }
+
+    &:active {
+      background-color: var(--white-a12);
+    }
+  }
+
+  .title {
+    grid-area: title;
+
+    font-size: 2rem;
+
+    display: flex;
+    flex-direction: row;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+  }
+
   .subtitle {
-    justify-content: flex-end;
+    grid-area: subtitle;
+
+    font-size: 2rem;
+
+    display: flex;
+    flex-direction: row;
   }
 
   .timer {
-    justify-content: center;
+    grid-area: timer;
 
-    font-size: 8rem;
-    line-height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    font-size: 5rem;
+
+    &.overtime {
+      color: var(--red-9);
+    }
+  }
+
+  .controls {
+    grid-area: controls;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
+    gap: 2em;
+  }
+
+  .finish-button {
+    background-color: var(--red-7);
+    color: white;
+
+    &:hover,
+    &:focus,
+    &:focus-visible {
+      background-color: var(--red-8);
+    }
+
+    &:active {
+      background-color: var(--red-9);
+    }
   }
 }

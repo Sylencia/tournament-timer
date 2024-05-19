@@ -15,21 +15,20 @@
 
   margin: 0 auto;
   padding: 0 1rem;
+  padding-bottom: 1rem;
 
   display: flex;
   flex-direction: column;
   place-items: center;
   gap: 1rem;
   min-width: 320px;
-  height: 100vh;
+  min-height: 100vh;
 
-  &.dark {
-    background: linear-gradient(-45deg, var(--iris-3), var(--plum-2));
-    color: var(--white-a10);
-  }
+  background: linear-gradient(-45deg, var(--iris-3), var(--plum-2));
+  background-size: 200% 200%;
+  color: var(--white-a10);
 
-  &.light {
-    background: linear-gradient(-45deg, var(--iris-4), var(--plum-4));
-    color: var(--black-a10);
+  &.top-pad {
+    padding-top: 2rem;
   }
 }

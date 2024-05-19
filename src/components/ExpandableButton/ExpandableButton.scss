@@ -1,0 +1,28 @@
+.expandable-button {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  box-shadow: none;
+  border: none;
+
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  align-items: center;
+
+  height: 2rem;
+  width: fit-content;
+
+  transition: 0.5s width ease-in;
+
+  background-color: var(--white-a10);
+
+  &:hover,
+  &:focus,
+  &:focus-visible {
+    background-color: var(--white-a11);
+  }
+
+  &:active {
+    background-color: var(--white-a12);
+  }
+}

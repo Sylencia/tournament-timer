@@ -1,10 +1,20 @@
-.header {
+@import "@radix-ui/colors/purple.css";
+@import "@radix-ui/colors/purple-dark.css";
+@import "@radix-ui/colors/white-alpha.css";
+
+.header-container {
   height: 3em;
   width: 100%;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid var(--purple-7);
 
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
 }

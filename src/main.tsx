@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
-import { ModeProvider } from "./ModeContext.tsx";
+import { PrefsProvider } from "./PrefsContext.tsx";
 import "./index.scss";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ModeProvider>
+    <PrefsProvider>
       <App />
-    </ModeProvider>
+    </PrefsProvider>
   </React.StrictMode>
 );
