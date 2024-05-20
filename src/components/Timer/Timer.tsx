@@ -23,8 +23,9 @@ interface ITimerProps {
   onEventFinish: () => void;
 }
 
-const formatTime = (seconds: number): string => {
-  const sign = seconds < 0 ? "-" : "";
+const formatTime = (milliseconds: number): string => {
+  const sign = milliseconds < 0 ? "-" : "";
+  const seconds = Math.round(milliseconds / 1000);
   const absSeconds = Math.abs(seconds);
   const hours = Math.floor(absSeconds / 3600);
   const minutes = Math.floor((absSeconds % 3600) / 60);
@@ -49,6 +50,7 @@ export const Timer = ({ storageId, onEventFinish }: ITimerProps) => {
   // Timer State
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [roundEnded, setRoundEnded] = useState<boolean>(false);
   // Audio
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -66,21 +68,20 @@ export const Timer = ({ storageId, onEventFinish }: ITimerProps) => {
 
   const handleTimerTick = useCallback(() => {
     if (isRunning) {
-      const currentTime = Math.round(Date.now() / 1000);
-      setTimeRemaining(eventDetails.endTime - currentTime);
-      if (timeRemaining === 0) {
+      setTimeRemaining(eventDetails.endTime - Date.now());
+      if (timeRemaining <= 0 && !roundEnded) {
+        setRoundEnded(true);
         playSound();
       }
     }
-  }, [isRunning, timeRemaining, eventDetails]);
+  }, [isRunning, timeRemaining, eventDetails, roundEnded]);
 
   const parseTimerDetails = useCallback((details: ISavedEvent) => {
     setIsRunning(details.isRunning);
     if (!details.isRunning) {
       setTimeRemaining(details.timeRemaining);
     } else {
-      const currentTime = Math.round(Date.now() / 1000);
-      setTimeRemaining(details.endTime - currentTime);
+      setTimeRemaining(details.endTime - Date.now());
     }
   }, []);
 
@@ -128,8 +129,7 @@ export const Timer = ({ storageId, onEventFinish }: ITimerProps) => {
 
   // Timer Functionality
   const start = useCallback(() => {
-    const currentTime = Math.round(Date.now() / 1000);
-    const endTime = currentTime + timeRemaining;
+    const endTime = Date.now() + timeRemaining;
     setIsRunning(true);
 
     const item: ISavedEvent = {
@@ -156,6 +156,7 @@ export const Timer = ({ storageId, onEventFinish }: ITimerProps) => {
   const nextRound = useCallback(() => {
     setTimeRemaining(eventDetails.roundTime);
     setIsRunning(false);
+    setRoundEnded(false);
 
     const item: ISavedEvent = {
       ...eventDetails,

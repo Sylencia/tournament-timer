@@ -5,11 +5,11 @@ import clsx from "clsx";
 import { ISavedEvent } from "../../interfaces";
 
 interface IEventDetails {
-  eventName: string | undefined;
-  rounds: string | undefined;
-  roundTime: string | undefined;
+  eventName: string;
+  rounds: string;
+  roundTime: string;
   hasDraft: boolean;
-  draftTime: string | undefined;
+  draftTime: string;
 }
 
 interface IEventDetailsValidation {
@@ -25,11 +25,11 @@ interface IEventSetupProps {
 }
 
 const defaultEventDetails: IEventDetails = {
-  eventName: undefined,
-  rounds: undefined,
-  roundTime: undefined,
+  eventName: "",
+  rounds: "",
+  roundTime: "",
   hasDraft: false,
-  draftTime: undefined,
+  draftTime: "",
 };
 
 const defaultValidation: IEventDetailsValidation = {
@@ -94,13 +94,13 @@ export const EventSetup = ({
       const item = localStorage.getItem(storageId);
       const { eventName, hasDraft, draftTime, rounds, roundTime } =
         eventDetails;
-      const convertedDraftTime = Number(draftTime ?? 0) * 60;
-      const convertedRoundTime = Number(roundTime) * 60;
+      const convertedDraftTime = Number(draftTime ?? 0) * 60 * 1000;
+      const convertedRoundTime = Number(roundTime) * 60 * 1000;
       if (item) {
         const parsed: ISavedEvent = JSON.parse(item);
         const newItem: ISavedEvent = {
           ...parsed,
-          eventName: eventName ?? "",
+          eventName: eventName,
           hasDraft: hasDraft,
           draftTime: convertedDraftTime,
           rounds: Number(rounds),
