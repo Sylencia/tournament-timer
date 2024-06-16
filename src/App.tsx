@@ -8,7 +8,7 @@ import { useUpdateTick } from "./hooks/useUpdateTick";
 
 function App() {
   const { colorScheme, showHeader } = useContext(PrefsContext);
-  useUpdateTick(300);
+  useUpdateTick(1000);
 
   return (
     <div
