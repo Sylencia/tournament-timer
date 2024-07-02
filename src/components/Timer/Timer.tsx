@@ -11,6 +11,7 @@ import clsx from "clsx";
 import { PrefsContext } from "../../PrefsContext";
 import { ISavedEvent, defaultSavedEvent } from "../../interfaces";
 import {
+  ClockIcon,
   Cross2Icon,
   DoubleArrowRightIcon,
   PauseIcon,
@@ -153,6 +154,23 @@ export const Timer = ({ storageId, onEventFinish }: ITimerProps) => {
     updateEventDetails(item);
   }, [eventDetails, timeRemaining, updateEventDetails]);
 
+  const addTime = useCallback(
+    (minutes: number) => {
+      const newTimeRemaining = timeRemaining + minutes * 60000;
+      setTimeRemaining(newTimeRemaining);
+      const newEndTime = eventDetails.endTime + minutes * 60000;
+
+      const item: ISavedEvent = {
+        ...eventDetails,
+        timeRemaining,
+        endTime: newEndTime,
+      };
+
+      updateEventDetails(item);
+    },
+    [timeRemaining, eventDetails, updateEventDetails]
+  );
+
   const nextRound = useCallback(() => {
     setTimeRemaining(eventDetails.roundTime);
     setIsRunning(false);
@@ -190,6 +208,12 @@ export const Timer = ({ storageId, onEventFinish }: ITimerProps) => {
                 <div>Start</div>
               </>
             )}
+          </button>
+          <button onClick={() => addTime(1)}>
+            <>
+              <ClockIcon />
+              <div>+1 minute</div>
+            </>
           </button>
           {eventDetails.currentRound !== eventDetails.rounds ? (
             <button onClick={() => nextRound()}>
