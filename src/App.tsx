@@ -7,7 +7,7 @@ import "./App.scss";
 import { useUpdateTick } from "./hooks/useUpdateTick";
 
 function App() {
-  const { colorScheme, showHeader } = useContext(PrefsContext);
+  const { colorScheme } = useContext(PrefsContext);
   useUpdateTick(1000);
 
   return (
@@ -15,10 +15,9 @@ function App() {
       className={clsx("app-container", {
         light: colorScheme === "light",
         dark: colorScheme === "dark",
-        "top-pad": !showHeader,
       })}
     >
-      {showHeader && <Header />}
+      <Header />
       <Event id={1} />
       <Event id={2} />
       <Event id={3} />
