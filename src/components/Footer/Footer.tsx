@@ -4,10 +4,15 @@ import "./Footer.scss";
 const getCurrentTimeString = (): string => {
   const now = new Date();
 
-  const hours = now.getHours().toString().padStart(2, "0");
+  let hours = now.getHours();
   const minutes = now.getMinutes().toString().padStart(2, "0");
 
-  const timeString = `${hours}:${minutes}`;
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+
+  const timeString = `${hours}:${minutes} ${ampm}`;
   return timeString;
 };
 

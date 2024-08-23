@@ -14,7 +14,8 @@
   border-top: 1px solid var(--purple-7);
   padding: 0 1rem;
   gap: 1rem;
-  color: var(--gray-10);
+
+  backdrop-filter: blur(10px);
 
   .label {
     font-size: 1.5rem;
