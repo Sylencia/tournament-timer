@@ -1,0 +1,26 @@
+@import "@radix-ui/colors/purple.css";
+@import "@radix-ui/colors/purple-dark.css";
+@import "@radix-ui/colors/gray.css";
+@import "@radix-ui/colors/gray-dark.css";
+
+.footer-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: fixed;
+  bottom: 0;
+  height: 3.5rem;
+  width: 100%;
+  border-top: 1px solid var(--purple-7);
+  padding: 0 1rem;
+  gap: 1rem;
+  color: var(--gray-10);
+
+  .label {
+    font-size: 1.5rem;
+  }
+
+  .current-time {
+    font-size: 3rem;
+  }
+}
