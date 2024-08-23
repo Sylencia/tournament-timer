@@ -8,7 +8,7 @@ import { useUpdateTick } from "./hooks/useUpdateTick";
 import { Footer } from "./components/Footer";
 
 function App() {
-  const { colorScheme, showHeader } = useContext(PrefsContext);
+  const { colorScheme, showHeader, mode } = useContext(PrefsContext);
   useUpdateTick(1000);
 
   return (
@@ -24,7 +24,7 @@ function App() {
       <Event id={2} />
       <Event id={3} />
       <Event id={4} />
-      <Footer />
+      {mode === "view" && <Footer />}
     </div>
   );
 }

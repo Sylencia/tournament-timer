@@ -7,12 +7,12 @@ const getCurrentTimeString = (): string => {
   let hours = now.getHours();
   const minutes = now.getMinutes().toString().padStart(2, "0");
 
-  const ampm = hours >= 12 ? "PM" : "AM";
+  const ampm = hours >= 12 ? "pm" : "am";
 
   hours = hours % 12;
   hours = hours ? hours : 12;
 
-  const timeString = `${hours}:${minutes} ${ampm}`;
+  const timeString = `${hours.toString().padStart(2, "0")}:${minutes}${ampm}`;
   return timeString;
 };
 
