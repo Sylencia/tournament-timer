@@ -1,5 +1,9 @@
 @import "@radix-ui/colors/red.css";
 @import "@radix-ui/colors/red-dark.css";
+@import "@radix-ui/colors/green.css";
+@import "@radix-ui/colors/green-dark.css";
+@import "@radix-ui/colors/sky.css";
+@import "@radix-ui/colors/sky-dark.css";
 @import "@radix-ui/colors/blue.css";
 @import "@radix-ui/colors/blue-dark.css";
 @import "@radix-ui/colors/purple.css";
@@ -62,10 +66,8 @@
     gap: 4px;
     place-items: center;
 
-    height: 2rem;
-    width: fit-content;
-    min-width: 100px;
-    max-width: 125px;
+    height: 2.125rem;
+    width: 8rem;
     background-color: var(--white-a10);
 
     transition: 0.2s background-color ease-in;
@@ -117,13 +119,22 @@
   }
 
   .controls {
-    grid-area: controls;
-
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-end;
-    gap: 2em;
+    gap: 1rem;
+  }
+
+  .control-container {
+    grid-area: controls;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
   }
 
   .finish-button {
@@ -138,6 +149,36 @@
 
     &:active {
       background-color: var(--red-9);
+    }
+  }
+
+  .start-button {
+    background-color: var(--green-7);
+    color: white;
+
+    &:hover,
+    &:focus,
+    &:focus-visible {
+      background-color: var(--green-8);
+    }
+
+    &:active {
+      background-color: var(--green-9);
+    }
+  }
+
+  .pause-button {
+    background-color: var(--sky-7);
+    color: white;
+
+    &:hover,
+    &:focus,
+    &:focus-visible {
+      background-color: var(--sky-8);
+    }
+
+    &:active {
+      background-color: var(--sky-9);
     }
   }
 }

@@ -13,7 +13,10 @@ import { ISavedEvent, defaultSavedEvent } from "../../interfaces";
 import {
   ClockIcon,
   Cross2Icon,
+  DoubleArrowDownIcon,
+  DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
+  DoubleArrowUpIcon,
   PauseIcon,
   PlayIcon,
 } from "@radix-ui/react-icons";
@@ -171,6 +174,19 @@ export const Timer = ({ storageId, onEventFinish }: ITimerProps) => {
     [timeRemaining, eventDetails, updateEventDetails]
   );
 
+  const addRound = useCallback(
+    (addedRounds: number) => {
+      const item: ISavedEvent = {
+        ...eventDetails,
+        timeRemaining,
+        rounds: eventDetails.rounds + addedRounds,
+      };
+
+      updateEventDetails(item);
+    },
+    [timeRemaining, eventDetails, updateEventDetails]
+  );
+
   const nextRound = useCallback(() => {
     setTimeRemaining(eventDetails.roundTime);
     setIsRunning(false);
@@ -186,6 +202,25 @@ export const Timer = ({ storageId, onEventFinish }: ITimerProps) => {
     updateEventDetails(item);
   }, [eventDetails, updateEventDetails]);
 
+  const previousRound = useCallback(() => {
+    const newRound = eventDetails.currentRound - 1;
+    const newTimeRemaining =
+      newRound === 0 ? eventDetails.draftTime : eventDetails.roundTime;
+
+    setTimeRemaining(newTimeRemaining);
+    setIsRunning(false);
+    setRoundEnded(false);
+
+    const item: ISavedEvent = {
+      ...eventDetails,
+      isRunning: false,
+      timeRemaining: newTimeRemaining,
+      currentRound: newRound,
+    };
+
+    updateEventDetails(item);
+  }, [eventDetails, updateEventDetails]);
+
   return (
     <div className={clsx("timer-container", { "view-mode": mode === "view" })}>
       <audio ref={audioRef} src={chime} />
@@ -195,40 +230,88 @@ export const Timer = ({ storageId, onEventFinish }: ITimerProps) => {
         {formatTime(timeRemaining)}
       </div>
       {mode === "edit" && (
-        <div className="controls">
-          <button onClick={() => (isRunning ? pause() : start())}>
-            {isRunning ? (
+        <div className="control-container">
+          <div className="controls">
+            <button onClick={() => addTime(-1)}>
               <>
-                <PauseIcon />
-                <div>Pause</div>
+                <ClockIcon />
+                <div>-1 minute</div>
               </>
-            ) : (
+            </button>
+            <button onClick={() => addTime(1)}>
               <>
-                <PlayIcon />
-                <div>Start</div>
+                <ClockIcon />
+                <div>+1 minute</div>
               </>
-            )}
-          </button>
-          <button onClick={() => addTime(1)}>
-            <>
-              <ClockIcon />
-              <div>+1 minute</div>
-            </>
-          </button>
-          {eventDetails.currentRound !== eventDetails.rounds ? (
-            <button onClick={() => nextRound()}>
+            </button>
+            <button
+              onClick={() => addRound(-1)}
+              disabled={
+                eventDetails.rounds === 1 ||
+                eventDetails.currentRound === eventDetails.rounds
+              }
+            >
+              <>
+                <DoubleArrowDownIcon />
+                <div>Remove Round</div>
+              </>
+            </button>
+            <button onClick={() => addRound(1)}>
+              <>
+                <DoubleArrowUpIcon />
+                <div>Add Round</div>
+              </>
+            </button>
+          </div>
+
+          <div className="controls">
+            <button
+              onClick={() => (isRunning ? pause() : start())}
+              className={clsx({
+                "start-button": !isRunning,
+                "pause-button": isRunning,
+              })}
+            >
+              {isRunning ? (
+                <>
+                  <PauseIcon />
+                  <div>Pause</div>
+                </>
+              ) : (
+                <>
+                  <PlayIcon />
+                  <div>Start</div>
+                </>
+              )}
+            </button>
+            <button
+              onClick={() => previousRound()}
+              disabled={
+                (eventDetails.hasDraft && eventDetails.currentRound === 0) ||
+                (!eventDetails.hasDraft && eventDetails.currentRound === 1)
+              }
+            >
+              <>
+                <DoubleArrowLeftIcon />
+                <div>Previous Round</div>
+              </>
+            </button>
+            <button
+              onClick={() => nextRound()}
+              disabled={eventDetails.currentRound === eventDetails.rounds}
+            >
               <>
                 <DoubleArrowRightIcon />
                 <div>Next Round</div>
               </>
             </button>
-          ) : null}
-          <button className="finish-button" onClick={onEventFinish}>
-            <>
-              <Cross2Icon />
-              <div>Finish Event</div>
-            </>
-          </button>
+            <button className="finish-button" onClick={onEventFinish}>
+              <>
+                <Cross2Icon />
+                <div>Finish Event</div>
+              </>
+            </button>
+          </div>
         </div>
       )}
     </div>
